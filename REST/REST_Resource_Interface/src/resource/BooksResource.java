@@ -1,4 +1,4 @@
-package service;
+package resource;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +23,7 @@ import vo.Book;
 import dao.BooksDAO;
 
 @Path("/books")
-public class BooksService {
+public class BooksResource {
 	@Context
 	private UriInfo uriInfo;
 

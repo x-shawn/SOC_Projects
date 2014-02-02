@@ -16,7 +16,7 @@ public class CustomTester {
 		WebResource service = client.resource(getBaseURI());
 
 		System.out.println(service.path("/books")
-				.accept(MediaType.TEXT_XML).get(String.class));
+				.accept(MediaType.APPLICATION_XML).get(String.class));
 	}
 
 	private static URI getBaseURI() {
