@@ -6,6 +6,7 @@ import java.util.Map;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
+import javax.ws.rs.DefaultValue;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -13,6 +14,7 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -20,6 +22,7 @@ import javax.ws.rs.core.UriInfo;
 import javax.xml.bind.JAXBElement;
 
 import vo.Book;
+import vo.BookBuilder;
 import dao.BooksDAO;
 
 @Path("/books")
@@ -28,6 +31,7 @@ public class BooksResource {
 	private UriInfo uriInfo;
 
 	/* GET resource in two typical representations start ***************** */
+
 	@GET
 	@Produces(MediaType.APPLICATION_XML)
 	public List<Book> getBooksAsAppXML() {
@@ -76,6 +80,25 @@ public class BooksResource {
 	}
 
 	/**
+	 * Another typical @GET scenario: query with parameters
+	 */
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<Book> queryBooks(
+			@DefaultValue("") @QueryParam("author") String author,
+			@DefaultValue("0") @QueryParam("year") int year) {
+		ArrayList<Book> result = new ArrayList<Book>();
+
+		for (Book b : this.getBooks()) {
+			if (author.equals(b.getAuthor()) && year == b.getYear()) {
+				result.add(b);
+			}
+		}
+
+		return result;
+	}
+
+	/**
 	 * A typical @POST scenario: resource creation with http status codes;
 	 * Specifically: 1. 201: created successfully; 2. 400: bad request (i.e.
 	 * de-serialization failed) 3. 500: internal server error (i.e. an exception
@@ -116,7 +139,7 @@ public class BooksResource {
 	public String createBookByForm(@FormParam("id") String id,
 			@FormParam("title") String title, @FormParam("detail") String detail) {
 
-		Book b = new Book(id, title, detail);
+		Book b = new BookBuilder(id, title).detail(detail).build();
 		BooksDAO.getStore().put(id, b);
 		return id;
 	}

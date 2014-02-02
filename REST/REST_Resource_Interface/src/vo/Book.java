@@ -10,19 +10,17 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @XmlRootElement
 public class Book {
+	// compulsory attributes
 	private String id;
 	private String title;
-	private String detail;
 	private String status;
+	// optional attributes
+	private int year;
+	private String author;
+	private String detail;
 
 	public Book() {
 		this.status = "new";
-	}
-	
-	public Book(String id, String title, String detail) {
-		this.id = id;
-		this.title = title;
-		this.detail = detail;
 	}
 
 	public String getId() {
@@ -41,19 +39,35 @@ public class Book {
 		this.title = title;
 	}
 
-	public String getDetail() {
-		return detail;
-	}
-
-	public void setDetail(String detail) {
-		this.detail = detail;
-	}
-
 	public String getStatus() {
 		return status;
 	}
 
 	public void setStatus(String status) {
 		this.status = status;
+	}
+
+	public int getYear() {
+		return year;
+	}
+
+	public void setYear(int year) {
+		this.year = year;
+	}
+
+	public String getAuthor() {
+		return author;
+	}
+
+	public void setAuthor(String author) {
+		this.author = author;
+	}
+
+	public String getDetail() {
+		return detail;
+	}
+
+	public void setDetail(String detail) {
+		this.detail = detail;
 	}
 }
