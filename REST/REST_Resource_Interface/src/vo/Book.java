@@ -3,6 +3,9 @@
  */
 package vo;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -14,13 +17,16 @@ public class Book {
 	private String id;
 	private String title;
 	private String status;
+	
 	// optional attributes
 	private int year;
 	private String author;
 	private String detail;
-
+	private List<BookMark> bookmarks;
+	
 	public Book() {
 		this.status = "new";
+		bookmarks = new ArrayList<BookMark>();
 	}
 
 	public String getId() {
@@ -69,5 +75,34 @@ public class Book {
 
 	public void setDetail(String detail) {
 		this.detail = detail;
+	}
+
+	public List<BookMark> getBookmarks() {
+		return bookmarks;
+	}
+
+	public void setBookmarks(List<BookMark> bookmarks) {
+		this.bookmarks = bookmarks;
+	}
+
+	public static Book copy(Book source) {
+		if(source == null) {
+			return null;
+		}
+		
+		Book target = new Book();
+		
+		target.id = source.id;
+		target.title = source.title;
+		target.status = source.status;
+		target.year = source.year;
+		target.author = source.author;
+		target.detail = source.detail;
+		
+		for(BookMark m : source.bookmarks){
+			target.bookmarks.add(m.clone());
+		}
+		
+		return target;
 	}
 }

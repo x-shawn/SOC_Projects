@@ -29,7 +29,7 @@ public final class BooksDAO {
 		Book b3 = new BookBuilder("3", "REST in Action").year(2010)
 				.author("O'Reilly")
 				.detail("http://oreilly.com/catalog/123456789")
-				.status("persistent").build();
+				.status("locked").build();
 
 		bookstore.put("1", b1);
 		bookstore.put("2", b2);
