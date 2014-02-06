@@ -1,5 +1,6 @@
 package resource;
 
+import java.net.URI;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
@@ -7,12 +8,15 @@ import java.util.Map;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
 
 import vo.Book;
 import vo.BookMark;
@@ -20,6 +24,7 @@ import vo.BookMark;
 import com.sun.jersey.api.ConflictException;
 import com.sun.jersey.api.NotFoundException;
 
+import cus_stat.InvalidContent;
 import dao.BooksDAO;
 
 /**
@@ -32,6 +37,8 @@ import dao.BooksDAO;
  */
 @Path("/books/{id}")
 public class BookResource {
+	@Context
+	private UriInfo uriInfo;
 
 	/* ********************* GET resource scenarios start ******************* */
 
@@ -255,6 +262,41 @@ public class BookResource {
 
 
 	/* POST resource scenarios start ******************************************* */
+
+	/**
+	 * Another typical use of @POST besides resource creation: see_other, aka
+	 * "post->redirect->get"; specifically, this use is for the situation where
+	 * the business method cannot be mapped to http method, aka "beyond CRUD",
+	 * e.g. one resource change triggers others and the returned resource is not
+	 * the one in request or its sub-resources
+	 */
+	@POST
+	public Response promotion(@PathParam("id") String bookID) {
+		Response response = null;
+		Book proof = this.getBook(bookID);
+
+		int age = Calendar.getInstance().get(Calendar.YEAR) - proof.getYear();
+		if (proof.getPrice() >= 100 && age <= 3) {
+			// business logic: create a voucher; get the current customer,
+			// update his/her status ...
+			
+			// redirect client to another resource with http status code - 303
+			URI redirect = uriInfo.getBaseUriBuilder()
+					.segment("customer", "dashboard").build();
+//			response = Response.status(Response.Status.SEE_OTHER)
+//					.header("Location", redirect.toString()).build();
+			response = Response.seeOther(redirect).build();
+		} else {
+			// use the custom http status code to show business logic
+			response = Response
+					.status(InvalidContent.getInstance())
+					.entity("The content in the request is not accepted, please submit a valid one")
+					.build();
+		}
+
+		return response;
+	}
+	
 	/* POST resource scenarios end ********************************************* */
 	
 	

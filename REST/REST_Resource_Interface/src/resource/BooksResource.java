@@ -21,6 +21,7 @@ import javax.xml.bind.JAXBElement;
 
 import vo.Book;
 import vo.BookBuilder;
+import vo.Voucher;
 import dao.BooksDAO;
 
 /**
@@ -55,14 +56,17 @@ public class BooksResource {
 	}
 
 	/**
-	 * A typical @POST scenario: resource creation with http status codes;
-	 * Specifically: 1. 201: created successfully; 2. 400: bad request (i.e.
+	 * A typical @POST scenario: a collection/composite resource acts as a
+	 * factory to create its member/sub resource with http status codes;
+	 * 
+	 * Specifically: 1. 201: created successfully (include URI of the new
+	 * created resource as response header); 2. 400: bad request (i.e.
 	 * de-serialization failed) 3. 500: internal server error (i.e. an exception
 	 * occurs)
 	 */
 	@POST
 	@Consumes(MediaType.APPLICATION_XML)
-	public Response createBook(Book newBook) {
+	public Response createBookWithResponse(Book newBook) {
 		Response response = null;
 
 		try {
@@ -111,24 +115,24 @@ public class BooksResource {
 		return result;
 	}
 
-	/* others ...*****************************************************/
+	/**
+	 * Batch process member resources, i.e. one operation on several members
+	 * 
+	 * Note that in this demo, @JAXBElement can only de-serialization the plain
+	 * POJO (cannot handle @Collection) in xml, it cannot handle json
+	 */
 	@PUT
 	@Consumes(MediaType.APPLICATION_XML)
-	@Produces(MediaType.TEXT_PLAIN)
-	public String updateBook2(JAXBElement<Book> xml) {
-		String result;
-		Book b = xml.getValue();
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<Book> updateBooks(JAXBElement<Voucher> requestBody) {
+		Voucher v = requestBody.getValue();
+		List<Book> bookList = this.getBooks();
 
-		Map<String, Book> db = BooksDAO.getStore();
-		String updated = b.getId();
-		if (db.containsKey(updated)) {
-			db.put(updated, b);
-			result = updated;
-		} else {
-			// error-code: 404
-			result = "updated resource does not exist";
+		for (Book b : bookList) {
+			b.setPrice(b.getPrice() - v.getValue());
+			// DAO update ...
 		}
 
-		return result;
+		return bookList;
 	}
 }

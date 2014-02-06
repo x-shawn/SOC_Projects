@@ -19,6 +19,7 @@ public class Book {
 	private String status;
 	
 	// optional attributes
+	private double price;
 	private int year;
 	private String author;
 	private String detail;
@@ -51,6 +52,14 @@ public class Book {
 
 	public void setStatus(String status) {
 		this.status = status;
+	}
+
+	public double getPrice() {
+		return price;
+	}
+
+	public void setPrice(double price) {
+		this.price = price;
 	}
 
 	public int getYear() {
@@ -91,10 +100,10 @@ public class Book {
 		}
 		
 		Book target = new Book();
-		
 		target.id = source.id;
 		target.title = source.title;
 		target.status = source.status;
+		target.price = source.price;
 		target.year = source.year;
 		target.author = source.author;
 		target.detail = source.detail;

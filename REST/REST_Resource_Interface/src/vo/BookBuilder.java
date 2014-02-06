@@ -10,7 +10,9 @@ public class BookBuilder {
 	// compulsory attributes
 	private String id;
 	private String title;
+	
 	// optional attributes
+	private double price;
 	private int year;
 	private String author;
 	private String detail;
@@ -26,6 +28,19 @@ public class BookBuilder {
 		}
 	}
 	
+	public double getPrice() {
+		return price;
+	}
+
+	public void setPrice(double price) {
+		this.price = price;
+	}
+
+	public BookBuilder price(double price) {
+		this.price = price;
+		return this;
+	}
+
 	public BookBuilder year(int year) {
 		this.year = year;
 		return this;
@@ -54,6 +69,7 @@ public class BookBuilder {
 		
 		b.setId(id);
 		b.setTitle(title);
+		b.setPrice(price);
 		b.setYear(year);
 		b.setAuthor(author);
 		b.setDetail(detail);
