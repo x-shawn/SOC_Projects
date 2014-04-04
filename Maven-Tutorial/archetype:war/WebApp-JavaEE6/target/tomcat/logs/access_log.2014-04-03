@@ -1,0 +1,4 @@
+127.0.0.1 - - [03/Apr/2014:22:48:40 +1100] "GET / HTTP/1.1" 404 - http-bio-8080-exec-1 0
+127.0.0.1 - - [03/Apr/2014:22:48:40 +1100] "GET /favicon.ico HTTP/1.1" 404 - http-bio-8080-exec-3 0
+127.0.0.1 - - [03/Apr/2014:22:49:16 +1100] "GET /WebApp-JavaEE6 HTTP/1.1" 302 - http-bio-8080-exec-4 0
+127.0.0.1 - - [03/Apr/2014:22:49:17 +1100] "GET /WebApp-JavaEE6/ HTTP/1.1" 200 307 http-bio-8080-exec-6 1001
